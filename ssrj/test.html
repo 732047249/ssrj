@@ -1,0 +1,35 @@
+<!--<p style="text-indent:0em;margin:4px auto 0px auto;"><font style="font-size:14.000000;color:#000000">我是</font><font style="font-size:14.000000;color:#000000">测试文字</font></p><img src="file:///var/mobile/Containers/Data/Application/3CCAA3C2-B251-4D7F-8988-983CC9C32FC8/Documents/2016-10-25%2009:45:15%20+0000.png" width="100%"/><p style="text-indent:0em;margin:4px auto 0px auto;"></p><p style="text-indent:0em;margin:4px auto 0px auto;"><font style="font-size:14.000000;color:#000000">哈哈哈哈哈哈哈</font><font style="font-size:14.000000;color:#000000"><b>，</b></font><font style="font-size:14.000000;color:#000000"><b>你好啊</b></font></p><p style="text-indent:0em;margin:4px auto 0px auto;"><font style="font-size:18.000000;color:#000000"><b>你也一样</b></font><font style="font-size:18.000000;color:#000000"><b> </b></font><font style="font-size:36.000000;color:#000000"><b>4</b></font><font style="font-size:36.000000;color:#000000"><b>3</b></font><font style="font-size:36.000000;color:#000000"><b>你系我</b></font></p><img src="file:///var/mobile/Containers/Data/Application/3CCAA3C2-B251-4D7F-8988-983CC9C32FC8/Documents/2016-10-25%2009:48:47%20+0000.png" width="100%"/><p style="text-indent:0em;margin:4px auto 0px auto;"></p><p style="text-indent:0em;margin:4px auto 0px auto;"><font style="font-size:36.000000;color:#000000"><b>我在玩游戏</b></font><font style="font-size:18.000000;color:#000000"><b>你呢</b></font></p>-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function app_ssrj_JSAction_userId(userid)
+            {
+                alert("Hello World!" + userid);
+                //alert('你好 ' + msg + ', 我也很高兴见到你')
+                document.getElementById('name').innerHTML = '你好 ' + userid + ', 我也很高兴见到你'
+                
+            }
+        function app_ssrj_JSAction_userId_tag(userid,tag)
+        {
+            alert("Hello World!" + "userid=" +userid + "tag:="+tag);
+        }
+        function alertName(msg) {
+            //alert('你好 ' + msg + ', 我也很高兴见到你')
+            document.getElementById('name').innerHTML = '你好 ' + msg + ', 我也很高兴见到你'
+        }
+        </script>
+    </head>
+    
+    <body>
+        <p id='name'> haha </p>
+        <a href="app-userid-ssrj:userId">
+            <img src="http://www.ssrj.com/upload/image/201703/f24ac057-0ec9-4647-8b69-6cf8340856e7-medium.png" />
+        </a>
+        <a href="app-userid-ssrj-tag:tag=88">
+            <img src="http://www.ssrj.com/upload/image/201703/f24ac057-0ec9-4647-8b69-6cf8340856e7-medium.png" />
+        </a>
+        <!--        <button onclick="app_ssrj_JSAction_userId()">点击这里</button>-->
+    </body>
+</html>

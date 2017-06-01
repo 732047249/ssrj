@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="4YJ-aS-CMX" customClass="RJGoodDetailColorButton">
+            <rect key="frame" x="0.0" y="0.0" width="70" height="28"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3uf-Xm-dNS">
+                    <rect key="frame" x="0.0" y="0.0" width="70" height="28"/>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cGW-2F-EZV">
+                    <rect key="frame" x="10" y="7" width="14" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="14" id="cvE-Bi-3HW"/>
+                        <constraint firstAttribute="width" secondItem="cGW-2F-EZV" secondAttribute="height" multiplier="1:1" id="tya-fQ-1wN"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="黑色" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-kJ-pnN">
+                    <rect key="frame" x="32" y="6" width="28" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="gjm-kJ-pnN" firstAttribute="centerY" secondItem="cGW-2F-EZV" secondAttribute="centerY" id="2Sq-zZ-l2P"/>
+                <constraint firstItem="gjm-kJ-pnN" firstAttribute="leading" secondItem="cGW-2F-EZV" secondAttribute="trailing" constant="8" id="ACh-2A-gdI"/>
+                <constraint firstAttribute="bottom" secondItem="cGW-2F-EZV" secondAttribute="bottom" constant="7" id="AkJ-SI-Pha"/>
+                <constraint firstItem="3uf-Xm-dNS" firstAttribute="top" secondItem="4YJ-aS-CMX" secondAttribute="top" id="WR0-gF-g3E"/>
+                <constraint firstItem="cGW-2F-EZV" firstAttribute="top" secondItem="4YJ-aS-CMX" secondAttribute="top" constant="7" id="hnJ-Ix-4NV"/>
+                <constraint firstAttribute="bottom" secondItem="3uf-Xm-dNS" secondAttribute="bottom" id="iRS-Ud-Ech"/>
+                <constraint firstAttribute="trailing" secondItem="3uf-Xm-dNS" secondAttribute="trailing" id="jte-0A-qmd"/>
+                <constraint firstItem="3uf-Xm-dNS" firstAttribute="leading" secondItem="4YJ-aS-CMX" secondAttribute="leading" id="o4p-2U-ACk"/>
+                <constraint firstAttribute="trailing" secondItem="gjm-kJ-pnN" secondAttribute="trailing" constant="10" id="v41-tZ-XsO"/>
+                <constraint firstItem="cGW-2F-EZV" firstAttribute="leading" secondItem="4YJ-aS-CMX" secondAttribute="leading" constant="10" id="zhC-8a-TDt"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="agentButton" destination="3uf-Xm-dNS" id="V1Y-mJ-LGT"/>
+                <outlet property="icon" destination="cGW-2F-EZV" id="Wmc-dX-4mT"/>
+                <outlet property="titleLabel" destination="gjm-kJ-pnN" id="uLD-T7-6td"/>
+            </connections>
+            <point key="canvasLocation" x="-262" y="1010"/>
+        </view>
+    </objects>
+</document>

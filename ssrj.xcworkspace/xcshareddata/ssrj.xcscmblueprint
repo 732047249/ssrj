@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "221BD680428BCD12CB54EFA5A4332DD356C048C2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "221BD680428BCD12CB54EFA5A4332DD356C048C2" : 0,
+    "F913E68F531892EDDE856B06EC591985F863433E" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5CE64168-6F64-4D89-8FDB-3C57DE99FB2A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "221BD680428BCD12CB54EFA5A4332DD356C048C2" : "ssrj_new\/",
+    "F913E68F531892EDDE856B06EC591985F863433E" : "ssrj_new\/ssrj\/Source\/Common\/Vendors\/NJKWebViewProgress\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ssrj",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ssrj.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.coding.net\/cc412\/ssrj_new.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "221BD680428BCD12CB54EFA5A4332DD356C048C2"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ninjinkun\/NJKWebViewProgress.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F913E68F531892EDDE856B06EC591985F863433E"
+    }
+  ]
+}

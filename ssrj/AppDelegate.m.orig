@@ -1,0 +1,468 @@
+//
+//  AppDelegate.m
+//  ssrj
+//
+//  Created by CC on 16/5/5.
+//  Copyright © 2016年 ssrj. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "UMSocialWechatHandler.h"
+#import "UMSocialQQHandler.h"
+#import "UMSocialSinaSSOHandler.h"
+#import "WXApi.h"
+#import "RJWXPayManager.h"
+#import <AlipaySDK/AlipaySDK.h>
+#import "RJAliPayManager.h"
+#import <UMMobClick/MobClick.h>
+#import "JPUSHService.h"
+#import "XZMCoreNewFeatureVC.h"
+#import "RJBaseTabBarTableViewController.h"
+#import "CALayer+Transition.h"
+#import "AppDelegate+EaseMob.h"
+#import "TalkingData.h"
+#import <AdSupport/AdSupport.h>
+#import "CYLTabBarControllerConfig.h"
+
+#import "XHLaunchAd.h"
+#import "LaunchAnimationModel.h"
+<<<<<<< HEAD
+#import "LaunchAdModel.h"
+#import "CCFirstInViewController.h"
+=======
+
+>>>>>>> a6404a10140b25593727fe50fc9f0dbab51e5440
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
+
+@interface AppDelegate ()<JPUSHRegisterDelegate>
+
+@property (assign, nonatomic) BOOL canShowNewFeature;
+
+//app启动动画模型
+//@property (strong, nonatomic) LaunchAnimationModel *launchAnimationModel;
+
+@end
+
+@implementation AppDelegate
++ (instancetype)shareInstance{
+
+    return (AppDelegate *)[[UIApplication sharedApplication]delegate];
+}
+
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    self.window = [[UIWindow alloc]init];
+    self.window.frame = [UIScreen mainScreen].bounds;
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    [[RJAppManager sharedInstance]configureApp];
+    /**
+     *  第三方 注册什么的
+     */
+    [self thirdSDKInit:application didFinishLaunchingWithOptions:launchOptions];
+    
+    CYLTabBarControllerConfig *tabBarControllerConfig = [CYLTabBarControllerConfig sharedInstance];
+    
+    [self.window setRootViewController:tabBarControllerConfig.tabBarController];
+    
+    [self.window makeKeyAndVisible];
+
+//    [self getLaunchAnimationData];
+    
+    [self showFirstInAD];
+    
+    [NSThread sleepForTimeInterval:2];
+
+    return YES;
+}
+
+
+- (void)getLaunchAnimationData {
+        
+    //http://192.168.1.29/api/v5/bootAnimation/view.jhtml?appVersion=2.2.0&token=da83e19a50a084522343d96746f0d889&type=1
+    
+    ZHRequestInfo *requestInfo = [ZHRequestInfo new];
+    
+    NSNumber *DeviceType = [NSNumber numberWithInt:0];
+    if (DEVICE_IS_IPHONE4) {
+        
+        DeviceType = [NSNumber numberWithInt:1];
+    }
+    else if (DEVICE_IS_IPHONE5) {
+        
+        DeviceType = [NSNumber numberWithInt:2];
+    }
+    else if (DEVICE_IS_IPHONE6) {
+        
+        DeviceType = [NSNumber numberWithInt:3];
+    }
+    else if (DEVICE_IS_IPHONE6Plus) {
+        
+        DeviceType = [NSNumber numberWithInt:4];
+    }
+    
+    NSString *urlStr = [NSString stringWithFormat:@"http://192.168.1.29/api/v5/bootAnimation/view.jhtml?type=%@",@1];
+    requestInfo.URLString = urlStr;
+    
+    __weak __typeof(&*self)weakSelf = self;
+    
+    [[ZHNetworkManager sharedInstance] getWithRequestInfoWithoutModel:requestInfo success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([responseObject objectForKey:@"state"]) {
+            
+            NSNumber *state = [responseObject objectForKey:@"state"];
+            
+            if (state.intValue == 0) {
+                
+                LaunchAnimationModel * model = [[LaunchAnimationModel alloc] initWithDictionary:responseObject[@"data"] error:nil];
+                
+                //写文件
+                NSArray *documentsPathArr = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                
+                NSString *documentsPath = [documentsPathArr lastObject];
+                
+                NSString *dicPath = [documentsPath stringByAppendingPathComponent:@"LaunchAnimation"];
+                
+                NSDictionary *LaunchAnimationDic = @{
+                                                     @"isShow":model.isShow,
+                                                     @"showType":model.showType,
+                                                     @"playTime":model.playTime,
+                                                     @"showUrl":model.showUrl
+                                                     };
+                
+                [LaunchAnimationDic writeToFile:dicPath atomically:YES];
+                
+                model.showUrl = @"http://ohnzw6ag6.bkt.clouddn.com/video1.mp4";
+                //显示启动页视频GIF方法封装
+                [weakSelf displayLaunchAnimationWithModel:model];
+                
+            }
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        //读文件
+        // 获取路径
+        NSArray *documentsPathArr = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsPath = [documentsPathArr lastObject];
+        NSString *dicPath = [documentsPath stringByAppendingPathComponent:@"LaunchAnimation"];
+        NSDictionary *LaunchAnimationDic = [NSDictionary dictionaryWithContentsOfFile:dicPath];
+        
+        LaunchAnimationModel * model = [[LaunchAnimationModel alloc] initWithDictionary:LaunchAnimationDic error:nil];;
+        
+        model.showUrl = @"http://ohnzw6ag6.bkt.clouddn.com/video1.mp4";
+        //显示启动页视频GIF方法封装
+        [weakSelf displayLaunchAnimationWithModel:model];
+        
+    }];
+    
+}
+
+#pragma mark -显示启动页视频GIF方法封装
+- (void)displayLaunchAnimationWithModel:(LaunchAnimationModel *)model {
+    
+    //显示广告
+    if (model.isShow.boolValue) {
+        
+        //gif 暂不考虑
+        if ([model.showType isEqualToNumber: @11]) {
+        }
+        //video
+        else if ([model.showType isEqualToNumber: @1]) {
+            
+            XHLaunchVideoAdConfiguratuon *videoAdconfiguratuon = [XHLaunchVideoAdConfiguratuon new];
+            //广告停留时间
+            videoAdconfiguratuon.duration = 5;//model.playTime.intValue *5 / 1000;
+            //广告frame
+            videoAdconfiguratuon.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            //广告视频URLString/或本地视频名(请带上后缀)
+            //注意:视频广告只支持先缓存,下次显示
+            videoAdconfiguratuon.videoNameOrURLString = model.showUrl;
+            //视频缩放模式
+            videoAdconfiguratuon.scalingMode = MPMovieScalingModeAspectFill;
+            //广告点击打开链接
+            videoAdconfiguratuon.openURLString = @"";//暂无此需求
+            //广告显示完成动画
+            videoAdconfiguratuon.showFinishAnimate =ShowFinishAnimateFadein;
+            //后台返回时,是否显示广告
+            videoAdconfiguratuon.showEnterForeground = NO;
+            //跳过按钮类型
+            videoAdconfiguratuon.skipButtonType = SkipTypeTimeText;
+            
+            [XHLaunchAd videoAdWithVideoAdConfiguration:videoAdconfiguratuon delegate:self];
+            
+        }
+    }
+}
+
+- (void)thirdSDKInit:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [UMSocialData setAppKey:UmengAppkey];
+    [UMSocialData openLog:NO];
+    [UMSocialWechatHandler setWXAppId:kAppKey_weixin appSecret:kAppSecret_weixin url:ssrjWebUrl];
+    [UMSocialQQHandler setQQWithAppId:kAppId_qq appKey:kAppKey_qq url:ssrjWebUrl];
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:kAppKey_weibo secret:kAppSecret_weibo RedirectURL:kRedirectURI_weibo];
+    //qq登录 web授权
+    [UMSocialQQHandler setSupportWebView:YES];
+    
+    //友盟数据统计
+    UMConfigInstance.appKey = UmengAppkey;
+    UMConfigInstance.channelId = @"App Store";
+    [MobClick startWithConfigure:UMConfigInstance];
+    [MobClick setLogEnabled:NO];
+    /**
+     * TalkingData
+     */
+    [TalkingData setExceptionReportEnabled:YES];
+    [TalkingData sessionStarted:@"121323001FB34A60C025E88EDB7A7BFB" withChannelId:@"App Store"];
+    [TalkingData setLogEnabled:NO];
+    /**
+     *  极光推送
+     */
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
+    entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge|UNAuthorizationOptionSound;
+    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+    NSLog(@"ios10方法注册");
+#endif
+    [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                      UIUserNotificationTypeSound |
+                                                      UIUserNotificationTypeAlert)
+                                          categories:nil];
+    //#warning 发布时候要改为YES
+    NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    
+    [JPUSHService setupWithOption:launchOptions appKey:@"9205f257226e7756a0413aa1"
+                          channel:@"App Store"
+                 apsForProduction:YES advertisingIdentifier:advertisingId];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(jpushLoginSuccess) name:kJPFNetworkDidLoginNotification object:nil];
+    [JPUSHService crashLogON];
+    NSDictionary *remoteNotification = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+    
+    if (remoteNotification) {
+        /**
+         *  下面ios7处理的方法依旧被调用
+         */
+        NSLog(@"点击推送被启动");
+        NSLog(@"remoteNotification=%@",remoteNotification);
+    }
+    [application setApplicationIconBadgeNumber:0];
+    [JPUSHService resetBadge];
+    //初始化环信SDK
+    [self easemobApplication:application didFinishLaunchingWithOptions:launchOptions];
+}
+- (void)showFirstInAD{
+    BOOL canShow = [XZMCoreNewFeatureVC canShowNewFeature];
+    canShow = YES;
+    if (canShow) {
+        self.window.rootViewController = [CCFirstInViewController newFirstInViewControllerWithImageName:@[@"1.gif",@"2.gif",@"3.gif",@"4.gif"] enterBlock:^{
+            NSLog(@"enterBlock");
+        }];
+//        self.window.rootViewController = [XZMCoreNewFeatureVC newFeatureVCWithImageNames:@[@"1",@"2",@"3",@"4"] enterBlock:^{
+//            CYLTabBarControllerConfig *tabBarControllerConfig = [CYLTabBarControllerConfig sharedInstance];
+//            [self.window setRootViewController:tabBarControllerConfig.tabBarController];
+//            [self.window makeKeyAndVisible];
+//
+//        } configuration:^(UIButton *enterButton) {
+////            [enterButton setBackgroundImage:[UIImage imageNamed:@"IMG_1966"] forState:UIControlStateNormal];
+////            [enterButton setBackgroundImage:[UIImage imageNamed:@"IMG_1966"] forState:UIControlStateHighlighted];
+//            enterButton.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+////            enterButton.center = CGPointMake(KScreenW * 0.5, KScreenH* 0.9);
+//        }];
+    }
+}
+- (void)jpushLoginSuccess{
+    NSLog(@"==极光推送登录成功==开始注册tag");
+    NSString *version = [NSString stringWithFormat:@"version_%@",VERSION];
+    NSString *version2 = [version stringByReplacingOccurrencesOfString:@"." withString:@"_"];
+    NSSet *set = [NSSet setWithObjects:@"lc26",version2,nil];
+    NSSet * set2 = [JPUSHService filterValidTags:set];
+    [JPUSHService setTags:set2 alias:nil fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+        NSLog(@"++++rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags , iAlias);
+        if (iResCode == 6002) {
+            NSLog(@"超时");
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [JPUSHService setTags:set2 alias:nil fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+                    NSLog(@"============rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags , iAlias);
+                }];
+            });
+         
+        }
+        
+    }];
+    if ([RJAccountManager sharedInstance].account.userid) {
+        [JPUSHService setTags:nil alias:[RJAccountManager sharedInstance].account.userid fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+            NSLog(@"============rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags , iAlias);
+           
+        }];
+    }else{
+        [JPUSHService setAlias:@"" callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:nil];
+    }
+
+}
+- (void)tagsAliasCallback:(int)iResCode tags:(NSSet*)tags alias:(NSString*)alias {
+    NSLog(@"++++---rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, tags , alias);
+}
+
+//qq weibo weixin 登录
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    if ([url.host isEqualToString:@"safepay"]) {
+        //跳转支付宝钱包进行支付，处理支付结果
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            
+            if ([RJAliPayManager shareInstance].delegate && [[RJAliPayManager shareInstance].delegate respondsToSelector:@selector(managerDidRecvAliPayResponse:)]) {
+                NSDictionary *dic = resultDic;
+                [[RJAliPayManager shareInstance].delegate managerDidRecvAliPayResponse:dic];
+            }
+        }];
+        return YES;
+    }
+    // add according to alipay官网
+    if ([url.host isEqualToString:@"platformapi"]){//支付宝钱包快登授权返回authCode
+        [[AlipaySDK defaultService] processAuthResult:url standbyCallback:^(NSDictionary *resultDic) {
+            //【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
+//            NSLog(@"result = %@",resultDic);
+            if ([RJAliPayManager shareInstance].delegate && [[RJAliPayManager shareInstance].delegate respondsToSelector:@selector(managerDidRecvAliPayResponse:)]) {
+                NSDictionary *dic = resultDic;
+                [[RJAliPayManager shareInstance].delegate managerDidRecvAliPayResponse:dic];
+            }
+            
+        }];
+        return YES;
+
+    }
+    
+    if ([[url absoluteString] rangeOfString:@"wx71d644fc50bc3765://pay"].location == 0) {
+//        NSLog(@"WX支付 回调");
+        return [WXApi handleOpenURL:url delegate:[RJWXPayManager sharedManager]];
+    }
+    else {
+        
+        return ([TencentOAuth HandleOpenURL:url] || [UMSocialSnsService handleOpenURL:url wxApiDelegate:nil] );
+    }
+}
+//// NOTE: 9.0以后使用新API接口
+//- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
+//{
+//    if ([url.host isEqualToString:@"safepay"]) {
+//        //跳转支付宝钱包进行支付，处理支付结果
+//        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+//            
+//            NSLog(@"result = %@",resultDic);
+//            
+//        }];
+//    }
+//    
+//    // add according to alipay官网
+//    if ([url.host isEqualToString:@"platformapi"]){//支付宝钱包快登授权返回authCode
+//        
+//        [[AlipaySDK defaultService] processAuthResult:url standbyCallback:^(NSDictionary *resultDic) {
+//            //【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
+//            NSLog(@"result = %@",resultDic);
+//        }];
+//    }
+//    
+//    return YES;
+//}
+- (void)applicationWillResignActive:(UIApplication *)application {
+    
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [application setApplicationIconBadgeNumber:0];
+    [JPUSHService resetBadge];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    //这里处理新浪微博SSO授权进入新浪微博客户端后进入后台，再返回原来应用
+    [UMSocialSnsService applicationDidBecomeActive];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    
+}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    if (application.applicationState == UIApplicationStateActive) {
+        NSLog(@"App在前台运行时候收到推送,不处理");
+        NSLog(@"推送信息%@",userInfo);
+        completionHandler(UIBackgroundFetchResultNewData);
+        return;
+    }else{
+        NSLog(@"在后台运行点击推荐进入");
+    }
+    
+    NSLog(@"推送信息%@",userInfo);
+    // IOS 7 Support Required
+    [application setApplicationIconBadgeNumber:0];
+    [JPUSHService resetBadge];
+    [self didRegisterFormApnsWithInfo:userInfo];
+    [JPUSHService handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+#pragma mark - 获得推送信息
+// iOS 10 Support
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
+    // Required
+    NSDictionary * userInfo = notification.request.content.userInfo;
+    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService handleRemoteNotification:userInfo];
+        [JPUSHService resetBadge];
+//        [self didRegisterFormApnsWithInfo:userInfo];
+        ///在前台时候收到推送
+    }
+    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+}
+
+// iOS 10 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    // Required
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService resetBadge];
+        [self didRegisterFormApnsWithInfo:userInfo];
+
+        [JPUSHService handleRemoteNotification:userInfo];
+    }
+    completionHandler();  // 系统要求执行这个方法
+}
+#endif
+
+- (void)didRegisterFormApnsWithInfo:(NSDictionary *)info{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kGetAPNSMessageNotification object:nil userInfo:info];
+}
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    /**
+     *   去环信 AppDelegate+EaseMob 中实现
+     */
+//    /// Required - 注册 DeviceToken
+//    [JPUSHService registerDeviceToken:deviceToken];
+}
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    //Optional
+    /**
+     *   去环信 AppDelegate+EaseMob 中实现
+     */
+}
+//- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    [super touchesBegan:touches withEvent:event];
+//    CGPoint location = [[[event allTouches] anyObject] locationInView:[self window]];
+//    CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
+//    if (CGRectContainsPoint(statusBarFrame, location)) {
+//        [self statusBarTouchedAction];
+//    }
+//}
+//
+//- (void)statusBarTouchedAction {
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kStatusBarTappedNotification
+//                                                        object:nil];
+//}
+@end

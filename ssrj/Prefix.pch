@@ -1,0 +1,81 @@
+//
+//  Prefix.pch
+//  ssrj
+//
+//  Created by CC on 16/5/5.
+//  Copyright © 2016年 ssrj. All rights reserved.
+//
+
+#ifndef Prefix_h
+#define Prefix_h
+#import <Availability.h>
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+#import "AppConfig.h"
+#import "UIConstants.h"
+#import "RJCommonConstants.h"
+#import "RJAppManager.h"
+
+#import "ZHRequestInfo.h"
+#import "ZHNetworkError.h"
+#import "ZHNetworkConstants.h"
+#import "ZHNetworkManager.h"
+#import "ZHRequestInfo.h"
+
+#import "RJAccountManager.h"
+
+#import "HTLogDefine.h"
+#import "HTHelper.h"
+#import "HTUIHelper.h"
+#import "RJBasicModel.h"
+#import "MBProgressHUD.h"
+#import "UMSocial.h"
+
+#import "NSString+Additions.h"
+#import "UIView+Layout.h"
+#import "UIColor+Hex.h"
+
+#import "UIImageView+WebCache.h"
+
+#import "LBXAlertAction.h"
+#import "MJRefresh.h"
+#import "JSONModel.h"
+
+#import <UMMobClick/MobClick.h>
+#import "RJShareBasicModel.h"
+//#import "RJNetWorkMessageModel.h"
+
+#import "LocalDefine.h"
+#import "TalkingData.h"
+#import "UIControl+Tracking.h"
+#import "UITableView+Tracking.h"
+#import "UICollectionView+Tracking.h"
+#import "UIView+Tracking.h"
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+
+#define kEaseMobUserToken @"token"
+#define kKefuBaseURL @"https://kefu.easemob.com"
+
+
+//Ext keyWord
+#define kMesssageExtWeChat @"weichat"
+#define kMesssageExtWeChat_ctrlType @"ctrlType"
+#define kMesssageExtWeChat_ctrlType_enquiry @"enquiry"
+#define kMesssageExtWeChat_ctrlType_inviteEnquiry @"inviteEnquiry"
+#define kMesssageExtWeChat_ctrlType_transferToKfHint  @"TransferToKfHint"
+#define kMesssageExtWeChat_ctrlType_transferToKf_HasTransfer @"hasTransfer"
+#define kMesssageExtWeChat_ctrlArgs @"ctrlArgs"
+#define kMesssageExtWeChat_ctrlArgs_inviteId @"inviteId"
+#define kMesssageExtWeChat_ctrlArgs_serviceSessionId @"serviceSessionId"
+#define kMesssageExtWeChat_ctrlArgs_detail @"detail"
+#define kMesssageExtWeChat_ctrlArgs_summary @"summary"
+#define kMesssageExtWeChat_ctrlArgs_label @"label"
+
+
+
+
+
+
+#endif /* Prefix_h */

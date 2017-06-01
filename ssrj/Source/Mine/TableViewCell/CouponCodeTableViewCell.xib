@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CouponCodeTableViewCell" rowHeight="72" id="KGk-i7-Jjw" customClass="CouponCodeTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="344" height="72"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="344" height="71"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" 请输入兑换码" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="16" background="Coupon_Enable" disabledBackground="Coupon_Unable" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hrW-XH-EXD">
+                        <rect key="frame" x="8" y="26" width="255" height="30"/>
+                        <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vfa-l8-UWr">
+                        <rect key="frame" x="266" y="26" width="70" height="30"/>
+                        <color key="backgroundColor" red="0.098039215686274508" green="0.050980392156862744" blue="0.19215686274509805" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="khT-g7-Jzr"/>
+                        </constraints>
+                        <state key="normal" title="兑换">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="vfa-l8-UWr" firstAttribute="leading" secondItem="hrW-XH-EXD" secondAttribute="trailing" constant="3" id="4x5-SB-wYM"/>
+                    <constraint firstAttribute="trailing" secondItem="vfa-l8-UWr" secondAttribute="trailing" constant="8" id="Vc4-cm-iVj"/>
+                    <constraint firstItem="hrW-XH-EXD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="Y4N-J8-AGl"/>
+                    <constraint firstItem="hrW-XH-EXD" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" constant="5" id="sQL-vd-TqB"/>
+                    <constraint firstItem="vfa-l8-UWr" firstAttribute="centerY" secondItem="hrW-XH-EXD" secondAttribute="centerY" id="xY0-xK-oSu"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="duiHuanBtn" destination="vfa-l8-UWr" id="AEj-JL-pwr"/>
+                <outlet property="textField" destination="hrW-XH-EXD" id="Fco-Th-nqn"/>
+            </connections>
+            <point key="canvasLocation" x="535" y="469"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Coupon_Enable" width="358" height="155"/>
+        <image name="Coupon_Unable" width="358" height="155"/>
+    </resources>
+</document>

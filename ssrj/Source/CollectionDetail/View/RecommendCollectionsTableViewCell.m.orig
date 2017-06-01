@@ -1,0 +1,100 @@
+//
+//  RecommendCollectionsTableViewCell.m
+//  ssrj
+//
+//  Created by MFD on 16/6/16.
+//  Copyright © 2016年 ssrj. All rights reserved.
+//
+
+#import "RecommendCollectionsTableViewCell.h"
+#import "CollectionsViewController.h"
+
+
+@interface RecommendCollectionsTableViewCell()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+
+@end
+
+@implementation RecommendCollectionsTableViewCell
+- (void)setDataArray:(NSArray *)dataArray{
+    _dataArray = dataArray;
+//    self.recommendCollectionsColView.frame = CGRectMake(0, 30, SCREEN_WIDTH, (dataArray.count+1)/2*(22 + SCREEN_WIDTH/320 *140 + 10 + 63));
+//    [self.recommendCollectionsColView reloadData];
+}
+
+- (UIViewController *)viewController{
+    for (UIView *nextView = [self superview]; nextView;nextView = [nextView superview]) {
+        UIResponder *nextResponser = [nextView nextResponder];
+        if ([nextResponser isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)nextResponser;
+        }
+    }
+    return nil;
+}
+
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    RecommendCollectionsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendCollectionsCollectionViewCell" forIndexPath:indexPath];
+    cell.dataModel = self.dataArray[indexPath.row];
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return CGSizeMake(SCREEN_WIDTH/320*160 ,22 + SCREEN_WIDTH/320 *140 + 10 + 63);
+}
+
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    collocationsItem *model = self.dataArray[indexPath.row];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Feng" bundle:nil];
+    CollectionsViewController *collectionViewController = [sb instantiateViewControllerWithIdentifier:@"CollectionsViewController"];
+    collectionViewController.collectionId = model.collocationId;
+    [self.viewController.navigationController pushViewController:collectionViewController animated:YES];
+}
+@end
+
+
+#pragma -@implementation RecommendCollectionsCollectionViewCell
+@implementation RecommendCollectionsCollectionViewCell
+
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    self.authorIcon.layer.cornerRadius = 14;
+    self.authorIcon.layer.masksToBounds = YES;
+    self.authorIcon.layer.borderWidth = 0.5;
+    self.authorIcon.layer.borderColor = [UIColor colorWithHexString:@"ffffff"].CGColor;
+}
+
+- (void)setDataModel:(collocationsItem *)dataModel{
+<<<<<<< HEAD
+    if (_dataModel != dataModel) {
+        _dataModel = dataModel;
+        [self.recommendCollectionsImageView sd_setImageWithURL:[NSURL URLWithString:dataModel.picture]];
+        self.recommendCollectionsName.text = dataModel.name;
+        self.recommendCollectionAuthor.text = dataModel.autherName;
+        [self.authorIcon sd_setImageWithURL:[NSURL URLWithString:dataModel.member.avatar] placeholderImage:[UIImage imageNamed:@"default_1x1"]];
+    }
+
+=======
+    [self.recommendCollectionsImageView sd_setImageWithURL:[NSURL URLWithString:dataModel.picture]];
+    self.recommendCollectionsName.text = dataModel.name;
+    self.recommendCollectionAuthor.text = dataModel.autherName;
+    NSLog(@"%@",dataModel.member.avatar);
+    [self.authorIcon sd_setImageWithURL:[NSURL URLWithString:dataModel.member.avatar] placeholderImage:[UIImage imageNamed:@"default_1x1"]];
+>>>>>>> 718f7ae716dc49ddc71ce670be71df38738087c1
+}
+@end
